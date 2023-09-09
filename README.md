@@ -40,8 +40,11 @@ mvn validate
 ### Rules
 $ git commit -S -m "YOUR_COMMIT_MESSAGE" - Creates a signed commit
 
+### help
+- host:8080/graphiql
 
-## links
+
+### links
 - [Signing commits](https://docs.github.com/ru/authentication/managing-commit-signature-verification/signing-commits)
 - [Generating a new GPG key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
 - [GPG failed to sign the data](https://candid.technology/error-gpg-failed-to-sign-the-data/)

@@ -1,0 +1,14 @@
+FROM openjdk:17.0.1-jdk-slim
+FROM eclipse-temurin:17-jdk-alpine
+ADD /target/discord.jar api.jar
+ENTRYPOINT ["java", "-jar", "api.jar"]
+
+FROM openjdk:17.0.1-jdk-slim as build
+WORKDIR /opt/app
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+COPY src src
+RUN ./mvnw clean package
+COPY /opt/app/target/*.jar api.jar
+ENTRYPOINT ["java","-jar","/api.jar"]
