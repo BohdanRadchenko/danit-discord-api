@@ -1,0 +1,25 @@
+### register
+POST http://localhost:{{port}}/{{prefix}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin1",
+  "password": "admin1"
+}
+
+### login
+POST http://localhost:{{port}}/{{prefix}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+### logout
+GET http://localhost:{{port}}/{{prefix}}/auth/logout
+Authorization: Bearer {{token}}
+
+### fefresh token
+GET http://localhost:{{port}}/{{prefix}}/auth/refresh
+Authorization: Bearer {{token}}
