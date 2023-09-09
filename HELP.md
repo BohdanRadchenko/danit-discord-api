@@ -4,6 +4,7 @@ git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
 
 git config --list
+export GPG_TTY=$(tty)
 
 git commit -S -m "YOUR_COMMIT_MESSAGE"
 
