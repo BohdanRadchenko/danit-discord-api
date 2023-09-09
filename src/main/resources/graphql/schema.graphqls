@@ -1,0 +1,12 @@
+type Test {
+    id: ID!
+    string: String
+    bool: Boolean
+    num: Int
+}
+
+type Query {
+    tests: [Test]
+    testsPagination(size: Int, page: Int): [Test]
+    test(id: Int): Test
+}

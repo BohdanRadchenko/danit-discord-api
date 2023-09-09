@@ -1,0 +1,9 @@
+[core]
+	hooksPath = .githooks
+[user]
+    name =
+    email =
+    signingkey =
+[commit]
+    # https://help.github.com/articles/signing-commits-using-gpg/
+    gpgsign = true

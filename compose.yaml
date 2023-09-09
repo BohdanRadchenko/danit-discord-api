@@ -1,0 +1,28 @@
+version: '3.6'
+
+services:
+  discord_postgres:
+    image: postgres:alpine
+    container_name: 'discord_postgres'
+    environment:
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=postgres'
+      - 'POSTGRES_DB=discord_db'
+    ports:
+      - '5432:5432'
+  discord_rabbitmq:
+    image: 'rabbitmq:latest'
+    restart: always
+    container_name: 'discord_rabbitmq'
+    environment:
+      - 'RABBITMQ_DEFAULT_PASS=secret'
+      - 'RABBITMQ_DEFAULT_USER=myuser'
+    ports:
+      - '5672'
+  discord_api:
+    build: ./
+    container_name: 'discord_api'
+    ports:
+      - "8080:8080"
+    links:
+      - "discord_postgres:postgres"
