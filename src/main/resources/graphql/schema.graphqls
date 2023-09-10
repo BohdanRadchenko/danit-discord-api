@@ -5,8 +5,18 @@ type Test {
     num: Int
 }
 
+type User {
+    id: ID!
+    email: String
+    userName: String
+    firstName: String
+    lastName: String
+}
+
 type Query {
     tests: [Test]
     testsPagination(size: Int, page: Int): [Test]
     test(id: Int): Test
+    users: [User]
+    user(id: Int): User
 }

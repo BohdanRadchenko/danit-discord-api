@@ -3,8 +3,11 @@ POST http://localhost:{{port}}/{{prefix}}/auth/register
 Content-Type: application/json
 
 {
-  "username": "admin1",
-  "password": "admin1"
+  "email": "admin@admin.com",
+  "username": "admin.admin",
+  "password": "adminpassword",
+  "firstName": "firstName",
+  "lastName": "lastName"
 }
 
 ### login
@@ -12,14 +15,6 @@ POST http://localhost:{{port}}/{{prefix}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "admin",
-  "password": "admin"
+  "email": "admin@admin.com",
+  "password": "adminpassword"
 }
-
-### logout
-GET http://localhost:{{port}}/{{prefix}}/auth/logout
-Authorization: Bearer {{token}}
-
-### fefresh token
-GET http://localhost:{{port}}/{{prefix}}/auth/refresh
-Authorization: Bearer {{token}}
