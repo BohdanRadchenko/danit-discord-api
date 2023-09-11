@@ -34,6 +34,7 @@ public class SecurityConfig {
                                 .requestMatchers(mvcMatcherBuilder.pattern("/swagger-ui/**")).permitAll()
                                 .requestMatchers(mvcMatcherBuilder.pattern("/graphiql**")).permitAll()
                                 .requestMatchers(mvcMatcherBuilder.pattern("/graphql")).permitAll() //TODO: ??
+                                .requestMatchers(mvcMatcherBuilder.pattern("/**")).permitAll() //TODO: ??
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)
