@@ -23,18 +23,29 @@ public class AuthJwtFilter extends OncePerRequestFilter {
     private final UserService userService;
     private final TokenService tokenService;
 
+    private boolean checkAuthRequest(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
+        boolean isLoginRequest = req.getServletPath().contains(Api.API_AUTH_LOGIN);
+        boolean isRegisterRequest = req.getServletPath().contains(Api.API_AUTH_REGISTER);
+        if (!isLoginRequest && !isRegisterRequest) return false;
+        chain.doFilter(req, res);
+        return true;
+    }
+
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        if (request.getServletPath().contains(Api.PREFIX + Api.AUTH)) {
+        if (checkAuthRequest(request, response, filterChain)) return;
+
+        String token = authJwtService.resolveToken(request);
+        if (token == null) {
             filterChain.doFilter(request, response);
             return;
         }
-        filterChain.doFilter(request, response);
-        return;
+        System.out.println("token : " + token);
+
 //        final String authHeader = request.getHeader("Authorization");
 //        final String jwt;
 //        final String userEmail;
@@ -43,9 +54,10 @@ public class AuthJwtFilter extends OncePerRequestFilter {
 //            return;
 //        }
 //        jwt = authHeader.substring(7);
-//        userEmail = jwtService.extractUsername(jwt);
+//        System.out.println("jwt " + jwt);
+//        userEmail = authJwtService.extractUsername(jwt);
 //        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-//            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+//            UserDetails userDetails = this.userService.loadUserByUsername(userEmail);
 //            var isTokenValid = tokenRepository.findByToken(jwt)
 //                    .map(t -> !t.isExpired() && !t.isRevoked())
 //                    .orElse(false);
@@ -61,6 +73,6 @@ public class AuthJwtFilter extends OncePerRequestFilter {
 //                SecurityContextHolder.getContext().setAuthentication(authToken);
 //            }
 //        }
-//        filterChain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
 }

@@ -1,10 +1,15 @@
 package com.danit.discord.services;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
@@ -12,13 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-
 @Service
 public class AuthJwtService {
-
+    private final String TOKEN_HEADER = "Authorization";
+    private final String TOKEN_PREFIX = "Bearer ";
     @Value("${application.security.jwt.access.key}")
     private String accessKey;
     @Value("${application.security.jwt.access.expiration}")
@@ -28,18 +30,59 @@ public class AuthJwtService {
     @Value("${application.security.jwt.refresh.expiration}")
     private long refreshExpiration;
 
-//    public String extractUsername(String token) {
-//        return extractClaim(token, Claims::getSubject);
+    public JwtParser jwtAccessParser() {
+        return Jwts.parser().setSigningKey(accessKey);
+    }
+
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(TOKEN_HEADER);
+        if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) {
+            return bearerToken.substring(TOKEN_PREFIX.length());
+        }
+        return null;
+    }
+
+//    private Claims parseJwtClaims(String token) {
+//        return jwtParser.parseClaimsJws(token).getBody();
 //    }
 
-//    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-//        final Claims claims = extractAllClaims(token);
-//        return claimsResolver.apply(claims);
+//    public Claims resolveClaims(HttpServletRequest req) {
+//        try {
+//            String token = resolveToken(req);
+//            if (token != null) {
+//                return parseJwtClaims(token);
+//            }
+//            return null;
+//        } catch (ExpiredJwtException ex) {
+//            req.setAttribute("expired", ex.getMessage());
+//            throw ex;
+//        } catch (Exception ex) {
+//            req.setAttribute("invalid", ex.getMessage());
+//            throw ex;
+//        }
 //    }
 
     private Key getSignInKey(String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private Claims extractAllClaims(String token, String secretKey) {
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(getSignInKey(secretKey))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public <T> T extractClaim(String token, String secretKey, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token, secretKey);
+        return claimsResolver.apply(claims);
+    }
+
+    public String extractUsername(String token, String secretKey) {
+        return extractClaim(token, secretKey, Claims::getSubject);
     }
 
     private String buildToken(

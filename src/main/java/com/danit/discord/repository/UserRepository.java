@@ -16,6 +16,4 @@ public interface UserRepository extends AppRepository<User> {
     Optional<User> findUserByUsername(String username);
 
     Optional<User> findByEmail(String username);
-
-    Optional<User> findUserByEmail(String email);
 }

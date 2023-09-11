@@ -61,11 +61,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User getByEmail(String email) throws NotFoundException {
-        System.out.println("email " + email);
         Optional<User> userOptional = userRepository.findByEmail(email);
-        System.out.println("userOptional " + userOptional);
-        Optional<User> userByEmail = userRepository.findUserByEmail(email);
-        System.out.println("userByEmail " + userByEmail);
         if (userOptional.isEmpty()) {
             throw new NotFoundException(
                     String.format("User with email %s not found!", email)

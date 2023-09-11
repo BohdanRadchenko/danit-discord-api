@@ -33,7 +33,7 @@ public class SecurityConfig {
                                 .requestMatchers(mvcMatcherBuilder.pattern(Api.API_AUTH_LOGIN)).permitAll()
                                 .requestMatchers(mvcMatcherBuilder.pattern("/swagger-ui/**")).permitAll()
                                 .requestMatchers(mvcMatcherBuilder.pattern("/graphiql**")).permitAll()
-                                .requestMatchers(mvcMatcherBuilder.pattern("/graphql")).permitAll()
+                                .requestMatchers(mvcMatcherBuilder.pattern("/graphql")).permitAll() //TODO: ??
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)
