@@ -50,7 +50,8 @@ public class UserService implements UserDetailsService {
         alreadyExistByEmail(registerRequest.getEmail());
         alreadyExistByUsername(registerRequest.getUsername());
         System.out.println("registerRequest " + registerRequest);
-        User user = User.builder()
+        User user = User
+                .builder()
                 .email(registerRequest.getEmail())
                 .username(registerRequest.getUsername())
                 .passwordHash(registerRequest.getPassword())

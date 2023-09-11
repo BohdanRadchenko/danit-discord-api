@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class LoginException extends RuntimeException {
+public class LoginException extends AppException {
     public LoginException(RuntimeException exception) {
         super(exception);
     }
