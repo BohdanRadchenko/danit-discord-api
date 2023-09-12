@@ -29,7 +29,6 @@ application:
         key: ${JWT_REFRESH_SECRET}
         expiration: ${JWT_REFRESH_SECRET_EXPIRE}
 ---
-
 spring:
   config:
     activate:
@@ -45,7 +44,6 @@ server:
   port: 8080
 
 ---
-
 spring:
   config:
     activate:
@@ -55,10 +53,5 @@ spring:
     url: jdbc:postgresql://postgres:5432/discord_db
     username: postgres
     password: postgres
-  jpa:
-    generate-ddl: false
-    show-sql: false
-    hibernate:
-      ddl-auto: none
 server:
   port: 8080
