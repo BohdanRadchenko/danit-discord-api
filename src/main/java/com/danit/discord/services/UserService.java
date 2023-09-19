@@ -1,17 +1,21 @@
 package com.danit.discord.services;
 
 import com.danit.discord.dto.auth.RegisterRequest;
+import com.danit.discord.dto.user.UserResponse;
 import com.danit.discord.entities.User;
 import com.danit.discord.exceptions.AlreadyExistException;
 import com.danit.discord.exceptions.NotFoundException;
 import com.danit.discord.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -42,6 +46,14 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public List<UserResponse> getAllUsers() {
+        return userRepository
+                .findAll()
+                .stream()
+                .map(UserResponse::of)
+                .collect(Collectors.toList());
+    }
+
     public User save(User user) {
         return userRepository.save(user);
     }
@@ -49,14 +61,12 @@ public class UserService implements UserDetailsService {
     public User create(RegisterRequest registerRequest) {
         alreadyExistByEmail(registerRequest.getEmail());
         alreadyExistByUsername(registerRequest.getUsername());
-        System.out.println("registerRequest " + registerRequest);
         User user = User
                 .builder()
                 .email(registerRequest.getEmail())
                 .username(registerRequest.getUsername())
+                .name(registerRequest.getName())
                 .passwordHash(registerRequest.getPassword())
-                .firstName(registerRequest.getFirstName())
-                .lastName(registerRequest.getLastName())
                 .build();
         return save(user);
     }
@@ -72,10 +82,9 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userByUserName = userRepository.findUserByUsername(username);
-        if (userByUserName.isEmpty()) return null;
-        User user = userByUserName.get();
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, NotFoundException {
+        User user = getByEmail(username);
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())

@@ -14,14 +14,10 @@ public class Token extends AbstractEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     public User userId;
-    @Column(unique = true, name = "refresh_token_hash")
+    @Column(name = "refresh_token_hash")
     public String refreshTokenHash;
 
     @Column(name = "token_type")
     @Enumerated(EnumType.STRING)
     public TokenType tokenType = TokenType.BEARER;
-
-    public boolean revoked;
-
-    public boolean expired;
 }
