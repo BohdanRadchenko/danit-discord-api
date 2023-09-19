@@ -11,6 +11,7 @@ public class UserResponse {
     private String email;
     private String userName;
     private String name;
+    private String avatar;
 
     public static UserResponse of(User user) {
         return UserResponse
@@ -19,6 +20,7 @@ public class UserResponse {
                 .name(user.getName())
                 .email(user.getEmail())
                 .userName(user.getUsername())
+                .avatar(user.getAvatar())
                 .build();
     }
 }

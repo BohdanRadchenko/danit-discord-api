@@ -2,6 +2,7 @@ package com.danit.discord.controllers;
 
 import com.danit.discord.annotations.ApiPrefix;
 import com.danit.discord.constants.Api;
+import com.danit.discord.dto.user.UserResponse;
 import com.danit.discord.entities.User;
 import com.danit.discord.responses.ResponseSuccess;
 import com.danit.discord.services.UserService;
@@ -31,7 +32,7 @@ public class UserController {
     })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseSuccess<List<User>> getAllUsers() {
+    public ResponseSuccess<List<UserResponse>> getAllUsers() {
         return ResponseSuccess.of(userService.getAllUsers());
     }
 }

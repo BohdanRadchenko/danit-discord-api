@@ -1,6 +1,7 @@
 package com.danit.discord.services;
 
 import com.danit.discord.dto.auth.RegisterRequest;
+import com.danit.discord.dto.user.UserResponse;
 import com.danit.discord.entities.User;
 import com.danit.discord.exceptions.AlreadyExistException;
 import com.danit.discord.exceptions.NotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -44,8 +46,12 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        return userRepository
+                .findAll()
+                .stream()
+                .map(UserResponse::of)
+                .collect(Collectors.toList());
     }
 
     public User save(User user) {
