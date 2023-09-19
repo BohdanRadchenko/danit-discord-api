@@ -29,10 +29,6 @@ public class AppConfig {
         return daoAuthenticationProvider;
     }
 
-    //    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
     @Bean
     public AuthenticationManager authenticationManager(
             HttpSecurity http,
@@ -42,4 +38,5 @@ public class AppConfig {
         authManagerBuilder.userDetailsService(userService).passwordEncoder(passwordEncoder);
         return authManagerBuilder.build();
     }
+
 }

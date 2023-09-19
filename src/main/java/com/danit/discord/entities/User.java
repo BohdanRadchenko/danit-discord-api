@@ -22,14 +22,11 @@ public class User extends AbstractEntity implements UserDetails {
     private String email;
     @Column(unique = true, nullable = false)
     private String username;
+
+    @Column(nullable = false)
+    private String name;
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
-    @Column(name = "is_enabled")
-    private Boolean isEnabled = true;
-    @Column(name = "first_name", nullable = false)
-    private String firstName;
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
     @Column
     private String avatar;
 

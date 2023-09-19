@@ -71,6 +71,10 @@ public class AuthJwtService {
         return jwtParser(accessKey, token).getSubject();
     }
 
+    public String getRefreshUsername(String token) throws ExpiredJwtException, SignatureException {
+        return jwtParser(refreshKey, token).getSubject();
+    }
+
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(TOKEN_HEADER);
         if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) {

@@ -6,8 +6,7 @@ Content-Type: application/json
   "email": "user@user.com",
   "username": "user.user",
   "password": "userpassword",
-  "firstName": "firstName",
-  "lastName": "lastName"
+  "name": "name"
 }
 
 ### login
@@ -28,20 +27,12 @@ Content-Type: application/json
   "password": "adminpassword"
 }
 
+### refresh
+GET http://localhost:{{port}}/{{prefix}}/auth/refresh
+Content-Type: application/json
+Authorization: Bearer {{refresh_token}}
 
 ### get me
 GET http://localhost:{{port}}/{{prefix}}/auth/me
 Content-Type: application/json
-Authorization: Bearer {{token}}
-
-
-### refresh
-POST http://localhost:{{port}}/{{prefix}}/auth/refresh
-Content-Type: application/json
-Authorization: Bearer {{token}}
-
-
-### test
-GET http://localhost:{{port}}/
-Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer {{access_token}}

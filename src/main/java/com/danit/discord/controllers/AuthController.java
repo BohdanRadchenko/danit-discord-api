@@ -13,11 +13,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -61,17 +60,20 @@ public class AuthController {
     })
     @GetMapping(Api.ME)
     @ResponseStatus(HttpStatus.OK)
-//    public ResponseSuccess<AuthResponse> getMe(Principal principal) {
-    public void getMe(Principal principal) {
-//    public void getMe() {
-        System.out.println("principal " + principal);
-//        return ResponseSuccess.of(authService.login(loginRequest));
+    public ResponseSuccess<UserResponse> getMe(Principal principal) {
+        return ResponseSuccess.of(authService.getMe((principal)));
     }
 
+    @Operation(summary = "Refresh token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
+    })
     @GetMapping(Api.REFRESH)
-    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseSuccess<AuthResponse> refreshToken(Authentication authentication) throws IOException {
+        return ResponseSuccess.of(authService.refreshToken(authentication));
     }
 }

@@ -12,6 +12,7 @@ public class Api {
     public static final String API_AUTH_WILDCARD = API_AUTH + "/**";
     public static final String API_AUTH_LOGIN = API_AUTH + LOGIN;
     public static final String API_AUTH_REGISTER = API_AUTH + REGISTER;
+    public static final String API_AUTH_REFRESH = API_AUTH + REFRESH;
     public static final String API_AUTH_ME = API_AUTH + ME;
 
     // USERS

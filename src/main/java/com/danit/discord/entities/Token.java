@@ -20,8 +20,4 @@ public class Token extends AbstractEntity {
     @Column(name = "token_type")
     @Enumerated(EnumType.STRING)
     public TokenType tokenType = TokenType.BEARER;
-
-    public boolean revoked;
-
-    public boolean expired;
 }

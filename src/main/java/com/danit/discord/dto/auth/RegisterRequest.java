@@ -19,18 +19,18 @@ public class RegisterRequest {
     @Size(min = 3, max = 30, message = "Invalid username: Must be of 3 - 30 characters")
     private String username;
 
+    @NotBlank(message = "Invalid name: Empty name")
+    @NotNull(message = "Invalid name: name is NULL")
+    @Size(min = 3, max = 16, message = "Invalid name: Must be of 3 - 16 characters")
+    private String name;
+
     @NotBlank(message = "Invalid password: password name")
     @NotNull(message = "Invalid password: password is NULL")
     @Size(min = 8, max = 30, message = "Invalid password: Must be of 8 - 30 characters")
     private String password;
 
-    @NotBlank(message = "Invalid first name: Empty first name")
-    @NotNull(message = "Invalid first name: first name is NULL")
-    @Size(min = 3, max = 16, message = "Invalid first name: Must be of 3 - 30 characters")
-    private String firstName;
-
-    @NotBlank(message = "Invalid last name: Empty last name")
-    @NotNull(message = "Invalid last name: last name is NULL")
-    @Size(min = 3, max = 16, message = "Invalid last name: Must be of 3 - 30 characters")
-    private String lastName;
+//    @NotNull(message = "Invalid dateOfBirth: dateOfBirth is NULL")
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+//    @JsonFormat(pattern = "yyyy/MM/dd")
+//    private LocalDate dateOfBirth;
 }

@@ -4,15 +4,18 @@ import com.danit.discord.controllers.TokenService;
 import com.danit.discord.dto.auth.AuthResponse;
 import com.danit.discord.dto.auth.LoginRequest;
 import com.danit.discord.dto.auth.RegisterRequest;
+import com.danit.discord.dto.user.UserResponse;
+import com.danit.discord.entities.Token;
 import com.danit.discord.entities.User;
-import com.danit.discord.exceptions.AlreadyExistException;
-import com.danit.discord.exceptions.BadRequestException;
-import com.danit.discord.exceptions.LoginException;
+import com.danit.discord.exceptions.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 
 @Service
 @Slf4j
@@ -24,7 +27,7 @@ public class AuthService {
     private final BCryptService bCryptService;
 
     private void authenticate(User user) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPasswordHash());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPasswordHash(), user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
 
@@ -32,7 +35,7 @@ public class AuthService {
         authenticate(user);
         String accessToken = authJwtService.generateAccessToken(user);
         String refreshToken = authJwtService.generateRefreshToken(user);
-        tokenService.create(bCryptService.encode(refreshToken), user);
+        tokenService.createOrUpdate(bCryptService.encode(refreshToken), user);
         return AuthResponse.of(accessToken, refreshToken, user);
     }
 
@@ -54,6 +57,28 @@ public class AuthService {
         } catch (Exception ex) {
             log.debug(ex.getMessage());
             throw new LoginException();
+        }
+    }
+
+    public UserResponse getMe(Principal principal) throws NotFoundException {
+        String email = principal.getName();
+        return UserResponse.of(userService.getByEmail(email));
+    }
+
+    public AuthResponse refreshToken(Authentication auth) {
+        try {
+            User user = userService.getByEmail(auth.getName());
+            Token token = tokenService.getByUser(user);
+
+            Boolean isMatch = bCryptService.match((String) auth.getCredentials(), token.getRefreshTokenHash());
+            if (!isMatch) {
+                throw new ForbiddenException("Invalid refresh token");
+            }
+
+            return generateTokensResponse(user);
+        } catch (Exception x) {
+            log.debug(x.getMessage());
+            throw new ForbiddenException("Invalid refresh token");
         }
     }
 }

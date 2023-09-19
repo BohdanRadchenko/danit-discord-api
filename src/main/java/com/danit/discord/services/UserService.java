@@ -59,9 +59,8 @@ public class UserService implements UserDetailsService {
                 .builder()
                 .email(registerRequest.getEmail())
                 .username(registerRequest.getUsername())
+                .name(registerRequest.getName())
                 .passwordHash(registerRequest.getPassword())
-                .firstName(registerRequest.getFirstName())
-                .lastName(registerRequest.getLastName())
                 .build();
         return save(user);
     }
