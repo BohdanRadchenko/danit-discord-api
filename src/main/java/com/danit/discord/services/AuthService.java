@@ -81,4 +81,9 @@ public class AuthService {
             throw new ForbiddenException("Invalid refresh token");
         }
     }
+
+    public void logout(Principal principal) {
+        User user = userService.getByEmail(principal.getName());
+        tokenService.destroyTokenByUser(user);
+    }
 }

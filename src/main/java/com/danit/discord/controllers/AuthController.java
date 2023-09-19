@@ -52,18 +52,6 @@ public class AuthController {
         return ResponseSuccess.of(authService.login(loginRequest));
     }
 
-    @Operation(summary = "get me")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))}),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
-    })
-    @GetMapping(Api.ME)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseSuccess<UserResponse> getMe(Principal principal) {
-        return ResponseSuccess.of(authService.getMe((principal)));
-    }
-
     @Operation(summary = "Refresh token")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
@@ -75,5 +63,28 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseSuccess<AuthResponse> refreshToken(Authentication authentication) throws IOException {
         return ResponseSuccess.of(authService.refreshToken(authentication));
+    }
+
+    @Operation(summary = "Get current user by access token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+    })
+    @GetMapping(Api.ME)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseSuccess<UserResponse> getMe(Principal principal) {
+        return ResponseSuccess.of(authService.getMe((principal)));
+    }
+
+    @Operation(summary = "Logout user by access token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "No content", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+    })
+    @GetMapping(Api.ME)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logout(Principal principal) {
+        authService.logout(principal);
     }
 }

@@ -54,4 +54,13 @@ public class TokenService {
         }
         return create(tokenString, user);
     }
+
+    public void destroyTokenByUser(User user) {
+        if (!isExistByUser(user)) {
+            NotFoundByUser(user);
+        }
+        Token token = getByUser(user);
+        token.setRefreshTokenHash("");
+        tokenRepository.save(token);
+    }
 }
