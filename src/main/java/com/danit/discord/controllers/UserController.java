@@ -3,7 +3,6 @@ package com.danit.discord.controllers;
 import com.danit.discord.annotations.ApiPrefix;
 import com.danit.discord.constants.Api;
 import com.danit.discord.dto.user.UserResponse;
-import com.danit.discord.entities.User;
 import com.danit.discord.responses.ResponseSuccess;
 import com.danit.discord.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +27,7 @@ public class UserController {
     @Operation(summary = "Get all users")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))}),
     })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
