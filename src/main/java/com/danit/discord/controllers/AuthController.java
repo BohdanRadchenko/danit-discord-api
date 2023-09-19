@@ -82,7 +82,7 @@ public class AuthController {
             @ApiResponse(responseCode = "204", description = "No content", content = @Content),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
     })
-    @GetMapping(Api.ME)
+    @GetMapping(Api.LOGOUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void logout(Principal principal) {
         authService.logout(principal);
