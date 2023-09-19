@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
@@ -25,20 +26,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
         MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
 
-        http.csrf(AbstractHttpConfigurer::disable);
-        http
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) ->
                         requests
-                                .requestMatchers(mvcMatcherBuilder.pattern(Api.API_AUTH_REGISTER)).permitAll()
                                 .requestMatchers(mvcMatcherBuilder.pattern(Api.API_AUTH_LOGIN)).permitAll()
+                                .requestMatchers(mvcMatcherBuilder.pattern(Api.API_AUTH_REGISTER)).permitAll()
                                 .requestMatchers(mvcMatcherBuilder.pattern("/swagger-ui/**")).permitAll()
-                                .requestMatchers(mvcMatcherBuilder.pattern("/graphiql**")).permitAll()
-                                .requestMatchers(mvcMatcherBuilder.pattern("/graphql")).permitAll() //TODO: ??
-                                .requestMatchers(mvcMatcherBuilder.pattern("/**")).permitAll() //TODO: ??
                                 .anyRequest().authenticated()
                 )
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+                .addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 }

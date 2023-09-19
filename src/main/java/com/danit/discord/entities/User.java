@@ -11,6 +11,7 @@ import java.util.Collection;
 
 @Entity(name = "users")
 @Data
+@ToString
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
@@ -24,7 +25,7 @@ public class User extends AbstractEntity implements UserDetails {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
     @Column(name = "is_enabled")
-    private Boolean isEnabled = false;
+    private Boolean isEnabled = true;
     @Column(name = "first_name", nullable = false)
     private String firstName;
     @Column(name = "last_name", nullable = false)
@@ -64,6 +65,6 @@ public class User extends AbstractEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        return true;
     }
 }

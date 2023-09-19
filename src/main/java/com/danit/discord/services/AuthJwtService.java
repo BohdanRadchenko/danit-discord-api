@@ -1,7 +1,7 @@
 package com.danit.discord.services;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -12,10 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.security.SignatureException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 @Service
 public class AuthJwtService {
@@ -30,59 +30,9 @@ public class AuthJwtService {
     @Value("${application.security.jwt.refresh.expiration}")
     private long refreshExpiration;
 
-    public JwtParser jwtAccessParser() {
-        return Jwts.parser().setSigningKey(accessKey);
-    }
-
-    public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(TOKEN_HEADER);
-        if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) {
-            return bearerToken.substring(TOKEN_PREFIX.length());
-        }
-        return null;
-    }
-
-//    private Claims parseJwtClaims(String token) {
-//        return jwtParser.parseClaimsJws(token).getBody();
-//    }
-
-//    public Claims resolveClaims(HttpServletRequest req) {
-//        try {
-//            String token = resolveToken(req);
-//            if (token != null) {
-//                return parseJwtClaims(token);
-//            }
-//            return null;
-//        } catch (ExpiredJwtException ex) {
-//            req.setAttribute("expired", ex.getMessage());
-//            throw ex;
-//        } catch (Exception ex) {
-//            req.setAttribute("invalid", ex.getMessage());
-//            throw ex;
-//        }
-//    }
-
     private Key getSignInKey(String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
-    }
-
-    private Claims extractAllClaims(String token, String secretKey) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey(secretKey))
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    public <T> T extractClaim(String token, String secretKey, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token, secretKey);
-        return claimsResolver.apply(claims);
-    }
-
-    public String extractUsername(String token, String secretKey) {
-        return extractClaim(token, secretKey, Claims::getSubject);
     }
 
     private String buildToken(
@@ -109,25 +59,23 @@ public class AuthJwtService {
         return buildToken(new HashMap<>(), userDetails, refreshKey, refreshExpiration);
     }
 
-//    public boolean isTokenValid(String token, UserDetails userDetails) {
-//        final String username = extractUsername(token);
-//        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
-//    }
+    public Claims jwtParser(String key, String token) throws ExpiredJwtException, SignatureException {
+        return Jwts
+                .parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+                .getBody();
+    }
 
-//    private boolean isTokenExpired(String token) {
-//        return extractExpiration(token).before(new Date());
-//    }
+    public String getAccessUsername(String token) throws ExpiredJwtException, SignatureException {
+        return jwtParser(accessKey, token).getSubject();
+    }
 
-//    private Date extractExpiration(String token) {
-//        return extractClaim(token, Claims::getExpiration);
-//    }
-
-//    private Claims extractAllClaims(String token) {
-//        return Jwts
-//                .parserBuilder()
-//                .setSigningKey(getSignInKey())
-//                .build()
-//                .parseClaimsJws(token)
-//                .getBody();
-//    }
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(TOKEN_HEADER);
+        if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) {
+            return bearerToken.substring(TOKEN_PREFIX.length());
+        }
+        return null;
+    }
 }

@@ -3,11 +3,20 @@ POST http://localhost:{{port}}/{{prefix}}/auth/register
 Content-Type: application/json
 
 {
-  "email": "admin@admin.com",
-  "username": "admin.admin",
-  "password": "adminpassword",
+  "email": "user@user.com",
+  "username": "user.user",
+  "password": "userpassword",
   "firstName": "firstName",
   "lastName": "lastName"
+}
+
+### login
+POST http://localhost:{{port}}/{{prefix}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@user.com",
+  "password": "userpassword"
 }
 
 ### login
@@ -18,6 +27,19 @@ Content-Type: application/json
   "email": "admin@admin.com",
   "password": "adminpassword"
 }
+
+
+### get me
+GET http://localhost:{{port}}/{{prefix}}/auth/me
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### refresh
+POST http://localhost:{{port}}/{{prefix}}/auth/refresh
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
 
 ### test
 GET http://localhost:{{port}}/

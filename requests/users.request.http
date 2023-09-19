@@ -1,0 +1,4 @@
+### GET all users
+GET http://localhost:{{port}}/{{prefix}}/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
