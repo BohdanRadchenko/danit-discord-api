@@ -19,5 +19,8 @@ public class Api {
 
     // USERS
     public static final String USERS = "/users";
+
+    //SERVERS
+    public static final String SERVERS = "/servers";
 }
 

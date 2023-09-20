@@ -4,7 +4,7 @@ import com.danit.discord.controllers.TokenService;
 import com.danit.discord.dto.auth.AuthResponse;
 import com.danit.discord.dto.auth.LoginRequest;
 import com.danit.discord.dto.auth.RegisterRequest;
-import com.danit.discord.dto.user.UserResponse;
+import com.danit.discord.dto.user.UserAuthResponse;
 import com.danit.discord.entities.Token;
 import com.danit.discord.entities.User;
 import com.danit.discord.exceptions.*;
@@ -60,9 +60,9 @@ public class AuthService {
         }
     }
 
-    public UserResponse getMe(Principal principal) throws NotFoundException {
+    public UserAuthResponse getMe(Principal principal) throws NotFoundException {
         String email = principal.getName();
-        return UserResponse.of(userService.getByEmail(email));
+        return UserAuthResponse.of(userService.getByEmail(email));
     }
 
     public AuthResponse refreshToken(Authentication auth) {

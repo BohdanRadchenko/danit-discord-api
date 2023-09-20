@@ -1,4 +1,3 @@
 ### swagger ui
 GET http://localhost:{{port}}//swagger-ui/index.html
 Content-Type: application/json
-Authorization: Bearer {{access_token}}

@@ -1,6 +1,6 @@
 package com.danit.discord.dto.auth;
 
-import com.danit.discord.dto.user.UserResponse;
+import com.danit.discord.dto.user.UserAuthResponse;
 import com.danit.discord.entities.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -18,14 +18,14 @@ public class AuthResponse {
     @JsonProperty("refresh_token")
     private String refreshToken;
     @JsonProperty("user")
-    private UserResponse user;
+    private UserAuthResponse user;
 
     public static AuthResponse of(String accessToken, String refreshToken, User user) {
         return AuthResponse
                 .builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .user(UserResponse.of(user))
+                .user(UserAuthResponse.of(user))
                 .build();
     }
 }
