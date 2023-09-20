@@ -6,6 +6,7 @@ import com.danit.discord.entities.Server;
 import com.danit.discord.entities.User;
 import com.danit.discord.repository.ServerRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -16,7 +17,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ServerService {
     private final ServerRepository serverRepository;
+    @Lazy
     private final UserService userService;
+
+    //TODO: remove next code after implementation invite
+//    private List<User> serverUsers;
 
     public Server save(Server server) {
         return serverRepository.save(server);
@@ -35,4 +40,9 @@ public class ServerService {
                 .map(ServerResponse::of)
                 .collect(Collectors.toList());
     }
+
+    //TODO: remove next code after implementation invite
+//    public void serverInvite(User user, boolean answer) {
+//        if (answer) serverUsers.add(userRepository.getReferenceById(user.getId()));
+//    }
 }
