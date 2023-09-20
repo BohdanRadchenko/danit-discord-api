@@ -1,0 +1,22 @@
+### login
+POST http://localhost:{{port}}/{{prefix}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@user.com",
+  "password": "userpassword"
+}
+
+### create new server
+POST http://localhost:{{port}}/{{prefix}}/servers
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "title": "test title"
+}
+
+### get all servers for auth user
+GET http://localhost:{{port}}/{{prefix}}/servers
+Content-Type: application/json
+Authorization: Bearer {{access_token}}

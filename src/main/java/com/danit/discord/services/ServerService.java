@@ -5,38 +5,34 @@ import com.danit.discord.dto.server.ServerResponse;
 import com.danit.discord.entities.Server;
 import com.danit.discord.entities.User;
 import com.danit.discord.repository.ServerRepository;
-import com.danit.discord.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class ServerService {
     private final ServerRepository serverRepository;
-    private final UserRepository userRepository;
-
-    private List<User> serverUsers;
+    private final UserService userService;
 
     public Server save(Server server) {
         return serverRepository.save(server);
     }
 
-    public ServerResponse create(ServerRequest serverRequest) {
-        System.out.println("serverRequest " + serverRequest);
-        Server server = Server.of(serverRequest);
+    public ServerResponse create(ServerRequest serverRequest, Principal principal) {
+        User user = userService.getByEmail(principal.getName());
+        Server server = Server.of(serverRequest, user);
         return ServerResponse.of(save(server));
     }
 
-    public void serverInvite(User user, boolean answer) {
-        if (answer) serverUsers.add(userRepository.getReferenceById(user.getId()));
+    public List<ServerResponse> getByUserEmail(String email) {
+        List<Server> servers = serverRepository.findAllByOwnerEmail(email);
+        return servers
+                .stream()
+                .map(ServerResponse::of)
+                .collect(Collectors.toList());
     }
-
-
-    public List<User> findAllUsers() {
-        return serverUsers;
-    }
-
-
 }

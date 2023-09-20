@@ -5,7 +5,7 @@ import com.danit.discord.constants.Api;
 import com.danit.discord.dto.auth.AuthResponse;
 import com.danit.discord.dto.auth.LoginRequest;
 import com.danit.discord.dto.auth.RegisterRequest;
-import com.danit.discord.dto.user.UserResponse;
+import com.danit.discord.dto.user.UserAuthResponse;
 import com.danit.discord.responses.ResponseSuccess;
 import com.danit.discord.services.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,12 +68,12 @@ public class AuthController {
     @Operation(summary = "Get current user by access token")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserAuthResponse.class))}),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
     })
     @GetMapping(Api.ME)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseSuccess<UserResponse> getMe(Principal principal) {
+    public ResponseSuccess<UserAuthResponse> getMe(Principal principal) {
         return ResponseSuccess.of(authService.getMe((principal)));
     }
 

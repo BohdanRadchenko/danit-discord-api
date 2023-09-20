@@ -7,14 +7,17 @@ import com.danit.discord.dto.server.ServerResponse;
 import com.danit.discord.responses.ResponseSuccess;
 import com.danit.discord.services.ServerService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
 
 @RestController
 @ApiPrefix(Api.SERVERS)
@@ -29,10 +32,21 @@ public class ServerController {
                     content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ServerResponse.class))}),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content)
     })
-
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ResponseSuccess<ServerResponse> create(@RequestBody ServerRequest serverRequest) {
-        return ResponseSuccess.of(serverService.create(serverRequest));
+    public ResponseSuccess<ServerResponse> create(@RequestBody ServerRequest serverRequest, Principal principal) {
+        return ResponseSuccess.of(serverService.create(serverRequest, principal));
+    }
+
+    @Operation(summary = "Get servers for user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ServerResponse.class)))})
+    })
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public ResponseSuccess<List<ServerResponse>> getAll(Principal principal) {
+        return ResponseSuccess.of(serverService.getByUserEmail(principal.getName()));
     }
 
 }

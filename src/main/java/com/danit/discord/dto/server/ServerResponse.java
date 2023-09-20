@@ -11,15 +11,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ServerResponse {
-
     private Long id;
     private String title;
+    private Long owner;
 
     public static ServerResponse of(Server server) {
         return ServerResponse
                 .builder()
                 .id(server.getId())
                 .title(server.getTitle())
+                .owner(server.getOwner().getId())
                 .build();
     }
 }

@@ -2,12 +2,15 @@ package com.danit.discord.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity(name = "users")
 @Data
@@ -28,6 +31,8 @@ public class User extends AbstractEntity implements UserDetails {
     private String passwordHash;
     @Column
     private String avatar;
+    @OneToMany(mappedBy = "owner")
+    private List<Server> owneredServers = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
