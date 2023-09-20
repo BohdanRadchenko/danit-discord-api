@@ -1,18 +1,15 @@
 package com.danit.discord.repository;
 
 import com.danit.discord.entities.Token;
+import com.danit.discord.entities.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
 public interface TokenRepository extends AppRepository<Token> {
-    //    @Query(value = """
-//            select t from tokens t inner join users u\s
-//            on t.user.id = u.id\s
-//            where u.id = :id and (t.expired = false or t.revoked = false)\s
-//            """)
-//    List<Token> findAllValidTokenByUserId(Integer id);
 
-    Optional<Token> findByRefreshTokenHash(String token);
+    Optional<Token> findByUserId(User user);
+
+    Boolean existsByUserId(User user);
 }

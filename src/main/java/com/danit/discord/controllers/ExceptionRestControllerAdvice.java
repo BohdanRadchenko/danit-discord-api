@@ -35,6 +35,7 @@ public class ExceptionRestControllerAdvice {
 
     @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<ResponseError> notFound(NotFoundException x) {
+        System.out.println(x);
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ResponseError.of(x.getMessage()));
@@ -42,6 +43,7 @@ public class ExceptionRestControllerAdvice {
 
     @ExceptionHandler({AlreadyExistException.class})
     public ResponseEntity<ResponseError> alreadyExist(AlreadyExistException x) {
+        System.out.println(x);
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(ResponseError.of(x.getMessage()));
@@ -49,6 +51,14 @@ public class ExceptionRestControllerAdvice {
 
     @ExceptionHandler({AppException.class})
     public ResponseEntity<ResponseError> appException(AppException x) {
+        System.out.println(x);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ResponseError.of(x.getMessage()));
+    }
+
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<ResponseError> appException(Exception x) {
         System.out.println(x);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
