@@ -6,8 +6,14 @@ public class Api {
     public static final String REGISTER = "/register";
     public static final String LOGIN = "/login";
     public static final String REFRESH = "/refresh";
+
     public static final String API_AUTH_REGISTER = PREFIX + AUTH + REGISTER;
     public static final String API_AUTH_LOGIN = PREFIX + AUTH + LOGIN;
     public static final String API_AUTH_REFRESH = PREFIX + AUTH + REFRESH;
+
+    //Server
+    public static final String SERVERS = "/servers";
+
+    //
 }
 
