@@ -1,12 +1,3 @@
-### login
-POST http://localhost:{{port}}/{{prefix}}/auth/login
-Content-Type: application/json
-
-{
-  "email": "user@user.com",
-  "password": "userpassword"
-}
-
 ### create new server
 POST http://localhost:{{port}}/{{prefix}}/servers
 Content-Type: application/json

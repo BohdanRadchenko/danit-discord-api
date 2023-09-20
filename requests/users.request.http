@@ -1,12 +1,3 @@
-### login
-POST http://localhost:{{port}}/{{prefix}}/auth/login
-Content-Type: application/json
-
-{
-  "email": "user@user.com",
-  "password": "userpassword"
-}
-
 ### GET all users
 GET http://localhost:{{port}}/{{prefix}}/users
 Content-Type: application/json
