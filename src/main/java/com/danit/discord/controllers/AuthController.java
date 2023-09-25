@@ -8,11 +8,13 @@ import com.danit.discord.dto.auth.RegisterRequest;
 import com.danit.discord.dto.user.UserAuthResponse;
 import com.danit.discord.responses.ResponseSuccess;
 import com.danit.discord.services.AuthService;
+import com.danit.discord.utils.Logging;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,7 @@ import java.security.Principal;
 @AllArgsConstructor
 public class AuthController {
     private final AuthService authService;
+    private final Logging logger = Logging.of(AuthController.class);
 
     @Operation(summary = "Registration user")
     @ApiResponses(value = {
@@ -36,8 +39,11 @@ public class AuthController {
     })
     @PostMapping(Api.REGISTER)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseSuccess<AuthResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
-        return ResponseSuccess.of(authService.register(registerRequest));
+    public ResponseSuccess<AuthResponse> register(@RequestBody @Valid RegisterRequest registerRequest, HttpServletRequest req) {
+        logger.request.info(req, registerRequest);
+        AuthResponse response = authService.register(registerRequest);
+        logger.response.info(req, response);
+        return ResponseSuccess.of(response);
     }
 
     @Operation(summary = "login")
@@ -48,8 +54,11 @@ public class AuthController {
     })
     @PostMapping(Api.LOGIN)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseSuccess<AuthResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
-        return ResponseSuccess.of(authService.login(loginRequest));
+    public ResponseSuccess<AuthResponse> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletRequest req) {
+        logger.request.info(req, loginRequest);
+        AuthResponse response = authService.login(loginRequest);
+        logger.response.info(req, response);
+        return ResponseSuccess.of(response);
     }
 
     @Operation(summary = "Refresh token")
@@ -61,8 +70,11 @@ public class AuthController {
     })
     @GetMapping(Api.REFRESH)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseSuccess<AuthResponse> refreshToken(Authentication authentication) throws IOException {
-        return ResponseSuccess.of(authService.refreshToken(authentication));
+    public ResponseSuccess<AuthResponse> refreshToken(Authentication authentication, HttpServletRequest req) throws IOException {
+        logger.request.info(req, authentication.getCredentials());
+        AuthResponse response = authService.refreshToken(authentication);
+        logger.response.info(req, response);
+        return ResponseSuccess.of(response);
     }
 
     @Operation(summary = "Get current user by access token")
@@ -73,8 +85,11 @@ public class AuthController {
     })
     @GetMapping(Api.ME)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseSuccess<UserAuthResponse> getMe(Principal principal) {
-        return ResponseSuccess.of(authService.getMe((principal)));
+    public ResponseSuccess<UserAuthResponse> getMe(Principal principal, HttpServletRequest req) {
+        logger.request.info(req, principal.getName());
+        UserAuthResponse response = authService.getMe((principal));
+        logger.response.info(req, response);
+        return ResponseSuccess.of(response);
     }
 
     @Operation(summary = "Logout user by access token")
@@ -84,7 +99,9 @@ public class AuthController {
     })
     @GetMapping(Api.LOGOUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logout(Principal principal) {
+    public void logout(Principal principal, HttpServletRequest req) {
+        logger.request.info(req, principal.getName());
         authService.logout(principal);
+        logger.response.info(req, "Logout success");
     }
 }

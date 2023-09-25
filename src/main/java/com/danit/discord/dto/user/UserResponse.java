@@ -22,7 +22,7 @@ public class UserResponse {
                 .builder()
                 .id(user.getId())
                 .name(user.getName())
-                .userName(user.getUsername())
+                .userName(user.getUserName())
                 .avatar(user.getAvatar())
                 .servers(user.getOwneredServers().stream().map(ServerResponse::of).collect(Collectors.toList()))
                 .build();
