@@ -4,8 +4,8 @@ import com.danit.discord.exceptions.AlreadyExistException;
 import com.danit.discord.exceptions.AppException;
 import com.danit.discord.exceptions.NotFoundException;
 import com.danit.discord.responses.ResponseError;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.danit.discord.utils.Logging;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestControllerAdvice
 public class ExceptionRestControllerAdvice {
-    private final static Logger LOGGER = LoggerFactory.getLogger(ExceptionRestControllerAdvice.class);
+    private final Logging logger = Logging.of(ExceptionRestControllerAdvice.class);
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<ResponseError> handleValidationErrors(MethodArgumentNotValidException x) {
@@ -34,24 +34,24 @@ public class ExceptionRestControllerAdvice {
     }
 
     @ExceptionHandler({NotFoundException.class})
-    public ResponseEntity<ResponseError> notFound(NotFoundException x) {
-        System.out.println(x);
+    public ResponseEntity<ResponseError> notFound(NotFoundException x, HttpServletRequest req) {
+        logger.response.error(req, x.getMessage());
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ResponseError.of(x.getMessage()));
     }
 
     @ExceptionHandler({AlreadyExistException.class})
-    public ResponseEntity<ResponseError> alreadyExist(AlreadyExistException x) {
-        System.out.println(x);
+    public ResponseEntity<ResponseError> alreadyExist(AlreadyExistException x, HttpServletRequest req) {
+        logger.response.error(req, x.getMessage());
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(ResponseError.of(x.getMessage()));
     }
 
     @ExceptionHandler({AppException.class})
-    public ResponseEntity<ResponseError> appException(AppException x) {
-        System.out.println(x);
+    public ResponseEntity<ResponseError> appException(AppException x, HttpServletRequest req) {
+        logger.response.error(req, x.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ResponseError.of(x.getMessage()));

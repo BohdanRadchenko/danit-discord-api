@@ -39,6 +39,10 @@ public class User extends AbstractEntity implements UserDetails {
         return null;
     }
 
+    public String getUserName() {
+        return username;
+    }
+    
     @Override
     public String getPassword() {
         return passwordHash;

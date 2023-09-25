@@ -19,7 +19,7 @@ public class UserAuthResponse {
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
-                .userName(user.getUsername())
+                .userName(user.getUserName())
                 .avatar(user.getAvatar())
                 .build();
     }
