@@ -3,7 +3,10 @@ package com.danit.discord.entities;
 import com.danit.discord.utils.NanoId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.*;
+
+import java.util.List;
 
 @Entity(name = "chats")
 @Data
@@ -14,6 +17,8 @@ import lombok.*;
 public class Chat extends AbstractEntity {
     @Column(unique = true, nullable = false)
     private String link;
+    @OneToMany(mappedBy = "chat")
+    private List<Message> messages;
 
     public static Chat create() {
         return Chat

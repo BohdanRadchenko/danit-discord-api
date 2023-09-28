@@ -31,6 +31,7 @@ public class Api {
 
     // TEXT
     public static final String CHANNELS_TEXT = CHANNELS + "/text";
+    public static final String CHANNELS_TEXT_LINK = CHANNELS + "/text/{link}";
 
     // WS
     public static final String PREFIX_WS_WILDCARD = PREFIX_WS + "/**";

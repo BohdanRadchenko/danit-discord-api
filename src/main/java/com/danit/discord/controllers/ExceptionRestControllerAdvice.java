@@ -2,6 +2,7 @@ package com.danit.discord.controllers;
 
 import com.danit.discord.exceptions.AlreadyExistException;
 import com.danit.discord.exceptions.AppException;
+import com.danit.discord.exceptions.ForbiddenException;
 import com.danit.discord.exceptions.NotFoundException;
 import com.danit.discord.responses.ResponseError;
 import com.danit.discord.utils.Logging;
@@ -46,6 +47,14 @@ public class ExceptionRestControllerAdvice {
         logger.response.error(req, x.getMessage());
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
+                .body(ResponseError.of(x.getMessage()));
+    }
+
+    @ExceptionHandler({ForbiddenException.class})
+    public ResponseEntity<ResponseError> alreadyExist(ForbiddenException x, HttpServletRequest req) {
+        logger.response.error(req, x.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
                 .body(ResponseError.of(x.getMessage()));
     }
 

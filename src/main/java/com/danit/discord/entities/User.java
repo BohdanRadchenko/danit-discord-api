@@ -1,8 +1,6 @@
 package com.danit.discord.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,6 +31,19 @@ public class User extends AbstractEntity implements UserDetails {
     private String avatar;
     @OneToMany(mappedBy = "owner")
     private List<Server> owneredServers = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "text-user",
+            inverseJoinColumns = @JoinColumn(name = "channel_id",
+                    nullable = false,
+                    updatable = false),
+            joinColumns = @JoinColumn(name = "user_id",
+                    nullable = false,
+                    updatable = false),
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
+    private List<TextChannel> textChannels = new ArrayList<>();
+    @OneToMany(mappedBy = "from")
+    private List<Message> messages;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

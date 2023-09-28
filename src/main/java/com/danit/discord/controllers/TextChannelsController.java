@@ -2,8 +2,7 @@ package com.danit.discord.controllers;
 
 import com.danit.discord.annotations.ApiPrefix;
 import com.danit.discord.constants.Api;
-import com.danit.discord.dto.auth.AuthResponse;
-import com.danit.discord.entities.TextChannel;
+import com.danit.discord.dto.text.TextChannelResponse;
 import com.danit.discord.responses.ResponseSuccess;
 import com.danit.discord.services.TextChannelService;
 import com.danit.discord.utils.Logging;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -31,28 +31,28 @@ public class TextChannelsController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseSuccess<List<TextChannel>> getAll() {
-        List<TextChannel> response = textChannelService.get();
+    public ResponseSuccess<List<TextChannelResponse>> getAll() {
+        List<TextChannelResponse> response = textChannelService.get();
         return ResponseSuccess.of(response);
     }
 
     @Operation(summary = "Get text channel by link")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))}),
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TextChannelResponse.class))}),
             @ApiResponse(responseCode = "401", description = "UNAUTHORIZED", content = @Content),
             @ApiResponse(responseCode = "403", description = "FORBIDDEN", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     })
     @GetMapping({"/{link}"})
     @ResponseStatus(HttpStatus.OK)
-    public ResponseSuccess<TextChannel> getTextChannelByLink(@PathVariable("link") String link, HttpServletRequest req) {
+    public ResponseSuccess<TextChannelResponse> getTextChannelByLink(@PathVariable("link") String link, Principal principal, HttpServletRequest req) {
         logger.request.info(req, link);
-        TextChannel response = textChannelService.getByLink(link);
+        TextChannelResponse response = textChannelService.getByLink(link, principal.getName());
         logger.response.info(req, response);
         return ResponseSuccess.of(response);
     }
-//
+
 //    @Operation(summary = "login")
 //    @ApiResponses(value = {
 //            @ApiResponse(responseCode = "200", description = "OK",

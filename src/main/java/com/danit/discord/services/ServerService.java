@@ -33,7 +33,7 @@ public class ServerService {
     public ServerResponse create(ServerRequest serverRequest, Principal principal) {
         User user = userService.getByEmail(principal.getName());
         Server server = save(Server.create(serverRequest, user));
-        TextChannel textChannel = textChannelService.create(server);
+        TextChannel textChannel = textChannelService.create(server, user);
         server.addTextChannel(textChannel);
         return ServerResponse.of(server);
     }
