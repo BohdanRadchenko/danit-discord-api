@@ -10,6 +10,7 @@ import org.springframework.web.socket.TextMessage;
 @ToString
 public class RoomMessage {
     private static final ObjectMapper om = new ObjectMapper();
+    private Long from;
     private String message;
 
     public String to() {

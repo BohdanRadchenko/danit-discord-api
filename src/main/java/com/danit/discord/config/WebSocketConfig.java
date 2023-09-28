@@ -62,8 +62,4 @@ public class WebSocketConfig implements WebSocketConfigurer {
         };
     }
 
-//    @Bean
-//    public WebSocketHandler webSocketTextHandler() {
-//        return new WebSocketChatHandler();
-//    }
 }

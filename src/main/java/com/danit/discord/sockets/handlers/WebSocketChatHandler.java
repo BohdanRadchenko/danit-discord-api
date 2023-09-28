@@ -1,7 +1,10 @@
 package com.danit.discord.sockets.handlers;
 
+import com.danit.discord.dto.message.MessageResponse;
 import com.danit.discord.dto.room.RoomMessage;
 import com.danit.discord.services.ChatService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +29,18 @@ import java.util.Map;
 @AllArgsConstructor
 public class WebSocketChatHandler extends TextWebSocketHandler implements SubProtocolCapable {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketChatHandler.class);
+    private static final ObjectMapper om = new ObjectMapper();
     @Lazy
     private final ChatService chatService;
     private final Map<String, Map<String, WebSocketSession>> sessions = new HashMap<>();
+
+    private <V extends Object> String toJson(V value) {
+        try {
+            return om.writeValueAsString(value);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private String getRoom(WebSocketSession session) {
         return (String) session.getAttributes().get("room");
@@ -59,11 +71,11 @@ public class WebSocketChatHandler extends TextWebSocketHandler implements SubPro
         sessions.put(room, roomSessions);
     }
 
-    private <Message extends CharSequence> void emit(WebSocketSession session, Message message) {
+    private <M extends Object> void emit(WebSocketSession session, M msg) {
         Map<String, WebSocketSession> room = getRoomSessions(session);
         room.forEach((k, v) -> {
             try {
-                v.sendMessage(new TextMessage(message));
+                v.sendMessage(new TextMessage(toJson(msg)));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -104,12 +116,14 @@ public class WebSocketChatHandler extends TextWebSocketHandler implements SubPro
 
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage tm) throws Exception {
-        RoomMessage message = RoomMessage.from(tm);
-        logger.info("Server received: {}", message.toString());
+        RoomMessage rm = RoomMessage.from(tm);
+        logger.info("Server received: {}", rm.toString());
 
-        String response = String.format("response from server to '%s'", HtmlUtils.htmlEscape(message.toString()));
+        MessageResponse message = chatService.createMessage(getRoom(session), rm);
+
+        String response = String.format("response from server to '%s'", HtmlUtils.htmlEscape(rm.toString()));
         logger.info("Server sends: {}", response);
-        emit(session, message.to());
+        emit(session, message);
     }
 
     @Override
