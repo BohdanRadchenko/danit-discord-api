@@ -12,6 +12,4 @@ public class ServerRequest {
     @NotNull(message = "Invalid server title: server title is NULL")
     @Size(min = 3, max = 16, message = "Invalid server title: Must be of 3 - 16 characters")
     private String title;
-
-
 }
