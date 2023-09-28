@@ -15,7 +15,7 @@ public class LoginRequest {
     @Email(regexp = ".*@.*\\..*", message = "Email should be valid")
     private String email;
 
-    @NotBlank(message = "Invalid password: password name")
+    @NotBlank(message = "Invalid password: empty password")
     @NotNull(message = "Invalid password: password is NULL")
     @Size(min = 8, max = 30, message = "Invalid password: Must be of 8 - 30 characters")
     private String password;

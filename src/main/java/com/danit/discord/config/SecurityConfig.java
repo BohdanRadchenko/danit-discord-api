@@ -55,6 +55,7 @@ public class SecurityConfig {
                                 .requestMatchers(mvcMatcherBuilder.pattern("/swagger-ui/**")).permitAll()
                                 .requestMatchers(mvcMatcherBuilder.pattern("/api-docs")).permitAll()
                                 .requestMatchers(mvcMatcherBuilder.pattern("/api-docs/**")).permitAll()
+                                .requestMatchers(mvcMatcherBuilder.pattern(Api.PREFIX_WS_WILDCARD)).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(authJwtFilter, UsernamePasswordAuthenticationFilter.class)

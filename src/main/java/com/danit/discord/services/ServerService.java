@@ -3,6 +3,7 @@ package com.danit.discord.services;
 import com.danit.discord.dto.server.ServerRequest;
 import com.danit.discord.dto.server.ServerResponse;
 import com.danit.discord.entities.Server;
+import com.danit.discord.entities.TextChannel;
 import com.danit.discord.entities.User;
 import com.danit.discord.repository.ServerRepository;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,8 @@ public class ServerService {
     private final ServerRepository serverRepository;
     @Lazy
     private final UserService userService;
+    @Lazy
+    private final TextChannelService textChannelService;
 
     //TODO: remove next code after implementation invite
 //    private List<User> serverUsers;
@@ -29,8 +32,10 @@ public class ServerService {
 
     public ServerResponse create(ServerRequest serverRequest, Principal principal) {
         User user = userService.getByEmail(principal.getName());
-        Server server = Server.of(serverRequest, user);
-        return ServerResponse.of(save(server));
+        Server server = save(Server.create(serverRequest, user));
+        TextChannel textChannel = textChannelService.create(server, user);
+        server.addTextChannel(textChannel);
+        return ServerResponse.of(server);
     }
 
     public List<ServerResponse> getByUserEmail(String email) {
