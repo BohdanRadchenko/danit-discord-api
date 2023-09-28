@@ -1,9 +1,14 @@
 package com.danit.discord.constants;
 
 public class Api {
+    // VARIABLES
+    public static final String PARAM_LINK = "link";
+
     // COMMON
     public static final String PREFIX = "/api/v1";
     public static final String PREFIX_WS = "/ws/v1";
+    public static final String LINK = "/{link}";
+    public static final String LINK_INVITE = "/{link}/invite";
 
     // AUTH
     public static final String AUTH = "/auth";
@@ -31,11 +36,12 @@ public class Api {
 
     // TEXT
     public static final String CHANNELS_TEXT = CHANNELS + "/text";
-    public static final String CHANNELS_TEXT_LINK = CHANNELS + "/text/{link}";
+    public static final String CHANNELS_TEXT_LINK = CHANNELS_TEXT + LINK;
+    public static final String CHANNELS_TEXT_LINK_INVITE = CHANNELS_TEXT + LINK_INVITE;
 
     // WS
     public static final String PREFIX_WS_WILDCARD = PREFIX_WS + "/**";
-    public static final String WS_CHAT = PREFIX_WS + "/chat";
-    public static final String WS_CHAT_LINK = WS_CHAT + "/{link}";
+    public static final String WS_ROOM = PREFIX_WS + "/room";
+    public static final String WS_ROOM_LINK = WS_ROOM + "/{link}";
 }
 

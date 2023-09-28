@@ -8,4 +8,6 @@ import java.util.Optional;
 @Repository
 public interface TextChannelRepository extends AppRepository<TextChannel> {
     Optional<TextChannel> getTextChannelByLink(String link);
+
+    boolean existsByLink(String link);
 }

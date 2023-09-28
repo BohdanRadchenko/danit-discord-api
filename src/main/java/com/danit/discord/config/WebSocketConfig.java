@@ -1,9 +1,13 @@
 package com.danit.discord.config;
 
 import com.danit.discord.constants.Api;
+import com.danit.discord.services.ChatService;
 import com.danit.discord.sockets.handlers.WebSocketChatHandler;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -14,11 +18,17 @@ import java.util.Map;
 
 @Configuration
 @EnableWebSocket
+@AllArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
+    @Lazy
+    private final ChatService chatService;
+    @Lazy
+    private final WebSocketChatHandler WebSocketChatHandler;
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry
-                .addHandler(webSocketTextHandler(), Api.WS_CHAT_LINK)
+                .addHandler(WebSocketChatHandler, Api.WS_ROOM_LINK)
                 .setAllowedOriginPatterns("*")
                 .addInterceptors(chatInterceptor());
     }
@@ -32,10 +42,17 @@ public class WebSocketConfig implements WebSocketConfigurer {
                     org.springframework.http.server.ServerHttpResponse response,
                     WebSocketHandler wsHandler, Map<String, Object> attributes
             ) throws Exception {
-                String path = request.getURI().getPath();
-                String chat = path.substring(path.lastIndexOf('/') + 1);
-                attributes.put("chat", chat);
-                return true;
+                try {
+                    String path = request.getURI().getPath();
+                    String room = path.substring(path.lastIndexOf('/') + 1);
+                    chatService.existByLink(room);
+                    attributes.put("room", room);
+                    return true;
+                } catch (Exception ex) {
+                    response.setStatusCode(HttpStatus.FORBIDDEN);
+                    response.flush();
+                    return false;
+                }
             }
 
             @Override
@@ -45,8 +62,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
         };
     }
 
-    @Bean
-    public WebSocketHandler webSocketTextHandler() {
-        return new WebSocketChatHandler();
-    }
+//    @Bean
+//    public WebSocketHandler webSocketTextHandler() {
+//        return new WebSocketChatHandler();
+//    }
 }

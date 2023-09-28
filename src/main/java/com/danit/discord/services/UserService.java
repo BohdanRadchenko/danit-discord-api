@@ -81,6 +81,16 @@ public class UserService implements UserDetailsService {
         return userOptional.get();
     }
 
+    public User getById(Long id) throws NotFoundException {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            throw new NotFoundException(
+                    String.format("User with id %s not found!", id)
+            );
+        }
+        return userOptional.get();
+    }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, NotFoundException {

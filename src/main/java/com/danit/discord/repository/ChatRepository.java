@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChatRepository extends AppRepository<Chat> {
+    boolean existsByLink(String link);
+
 }
