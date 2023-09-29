@@ -1,4 +1,4 @@
-package com.danit.discord.controllers;
+package com.danit.discord.services;
 
 import com.danit.discord.entities.Token;
 import com.danit.discord.entities.User;

@@ -1,5 +1,6 @@
 package com.danit.discord.dto.text;
 
+import com.danit.discord.constants.Api;
 import com.danit.discord.dto.message.MessageResponse;
 import com.danit.discord.dto.server.ServerTextChannelResponse;
 import com.danit.discord.entities.TextChannel;
@@ -22,13 +23,17 @@ public class TextChannelResponse {
     private String connect;
     private List<MessageResponse> messages;
 
+    private static String createConnectLink(String link) {
+        return String.format("%s/%s", Api.ROOM, link);
+    }
+
     public static TextChannelResponse of(TextChannel channel) {
         return TextChannelResponse
                 .builder()
                 .title(channel.getTitle())
                 .link(channel.getLink())
                 .server(ServerTextChannelResponse.of(channel.getServer()))
-                .connect(channel.getChat().getLink())
+                .connect(createConnectLink(channel.getChat().getLink()))
                 .messages(channel
                         .getChat()
                         .getMessages()

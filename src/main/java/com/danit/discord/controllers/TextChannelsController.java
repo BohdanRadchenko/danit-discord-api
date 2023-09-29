@@ -62,7 +62,7 @@ public class TextChannelsController {
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     })
-    @GetMapping(Api.LINK_INVITE)
+    @PostMapping(Api.LINK_INVITE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseSuccess<?> inviteToChannel(
             @PathVariable(Api.PARAM_LINK) String link,
