@@ -1,6 +1,5 @@
 package com.danit.discord.services;
 
-import com.danit.discord.controllers.TokenService;
 import com.danit.discord.dto.auth.AuthResponse;
 import com.danit.discord.dto.auth.LoginRequest;
 import com.danit.discord.dto.auth.RegisterRequest;

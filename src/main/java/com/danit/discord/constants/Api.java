@@ -9,6 +9,7 @@ public class Api {
     public static final String PREFIX_WS = "/ws/v1";
     public static final String LINK = "/{link}";
     public static final String LINK_INVITE = "/{link}/invite";
+    public static final String ROOM = "/room";
 
     // AUTH
     public static final String AUTH = "/auth";
@@ -34,6 +35,11 @@ public class Api {
     // CHANNELS
     public static final String CHANNELS = "/channels";
 
+    // MESSAGES
+    public static final String MESSAGES = "/messages";
+    public static final String TYPES = "/types";
+    public static final String MESSAGES_TYPES = MESSAGES + "/types";
+
     // TEXT
     public static final String CHANNELS_TEXT = CHANNELS + "/text";
     public static final String CHANNELS_TEXT_LINK = CHANNELS_TEXT + LINK;
@@ -41,7 +47,7 @@ public class Api {
 
     // WS
     public static final String PREFIX_WS_WILDCARD = PREFIX_WS + "/**";
-    public static final String WS_ROOM = PREFIX_WS + "/room";
+    public static final String WS_ROOM = PREFIX_WS + ROOM;
     public static final String WS_ROOM_LINK = WS_ROOM + "/{link}";
 }
 
