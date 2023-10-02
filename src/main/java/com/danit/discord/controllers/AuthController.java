@@ -27,6 +27,7 @@ import java.security.Principal;
 @RestController
 @ApiPrefix(Api.AUTH)
 @AllArgsConstructor
+@CrossOrigin
 public class AuthController {
     private final AuthService authService;
     private final Logging logger = Logging.of(AuthController.class);
@@ -86,6 +87,21 @@ public class AuthController {
     @GetMapping(Api.ME)
     @ResponseStatus(HttpStatus.OK)
     public ResponseSuccess<UserAuthResponse> getMe(Principal principal, HttpServletRequest req) {
+        logger.request.info(req, principal.getName());
+        UserAuthResponse response = authService.getMe((principal));
+        logger.response.info(req, response);
+        return ResponseSuccess.of(response);
+    }
+
+    @Operation(summary = "Get current user by access token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserAuthResponse.class))}),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+    })
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseSuccess<UserAuthResponse> getAuthMe(Principal principal, HttpServletRequest req) {
         logger.request.info(req, principal.getName());
         UserAuthResponse response = authService.getMe((principal));
         logger.response.info(req, response);

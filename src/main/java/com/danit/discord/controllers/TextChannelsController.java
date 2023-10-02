@@ -71,6 +71,7 @@ public class TextChannelsController {
             HttpServletRequest req) {
         String msg = String.format("link: %s, body: %s", link, request);
         logger.request.info(req, msg);
+        // TODO: invite to server if user not invited
         TextChannel channel = textChannelService.invite(link, principal.getName(), request);
         logger.response.info(req, msg);
         return ResponseSuccess.of(String.format("User added to '%s' channel", channel.getTitle()));

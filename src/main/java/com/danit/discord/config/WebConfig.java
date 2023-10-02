@@ -18,7 +18,15 @@ import java.lang.annotation.Annotation;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
+        registry
+                .addMapping("/*")
+                .allowedOrigins("*")
+                .allowCredentials(false)
+                .allowedHeaders("*")
+                .exposedHeaders("*")
+                .maxAge(60 * 30)
+                .allowedMethods("*");
+//        registry.addMapping("/**");
     }
 
     @Override
