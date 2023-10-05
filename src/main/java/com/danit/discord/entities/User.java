@@ -44,7 +44,17 @@ public class User extends AbstractEntity implements UserDetails {
     private List<TextChannel> textChannels = new ArrayList<>();
     @OneToMany(mappedBy = "from")
     private List<Message> messages;
-
+    @ManyToMany
+    @JoinTable(name = "user-user",
+            inverseJoinColumns = @JoinColumn(name = "user_1",
+                    nullable = false,
+                    updatable = false),
+            joinColumns = @JoinColumn(name = "user_2",
+                    nullable = false,
+                    updatable = false),
+            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
+    private List<User> friends = new ArrayList<>();
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
