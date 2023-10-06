@@ -2,9 +2,9 @@ package com.danit.discord.controllers;
 
 import com.danit.discord.annotations.ApiPrefix;
 import com.danit.discord.constants.Api;
+import com.danit.discord.dto.ResponseSuccess;
 import com.danit.discord.dto.server.ServerRequest;
 import com.danit.discord.dto.server.ServerResponse;
-import com.danit.discord.responses.ResponseSuccess;
 import com.danit.discord.services.ServerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

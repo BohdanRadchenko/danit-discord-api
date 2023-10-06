@@ -2,10 +2,10 @@ package com.danit.discord.controllers;
 
 import com.danit.discord.annotations.ApiPrefix;
 import com.danit.discord.constants.Api;
+import com.danit.discord.dto.ResponseSuccess;
 import com.danit.discord.dto.channel.ChannelInviteRequest;
 import com.danit.discord.dto.text.TextChannelResponse;
 import com.danit.discord.entities.TextChannel;
-import com.danit.discord.responses.ResponseSuccess;
 import com.danit.discord.services.TextChannelService;
 import com.danit.discord.utils.Logging;
 import io.swagger.v3.oas.annotations.Operation;

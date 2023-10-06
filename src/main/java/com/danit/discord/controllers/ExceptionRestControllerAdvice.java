@@ -1,10 +1,10 @@
 package com.danit.discord.controllers;
 
+import com.danit.discord.dto.ResponseError;
 import com.danit.discord.exceptions.AlreadyExistException;
 import com.danit.discord.exceptions.AppException;
 import com.danit.discord.exceptions.ForbiddenException;
 import com.danit.discord.exceptions.NotFoundException;
-import com.danit.discord.responses.ResponseError;
 import com.danit.discord.utils.Logging;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;

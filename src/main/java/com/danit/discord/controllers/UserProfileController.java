@@ -25,11 +25,11 @@ import java.io.IOException;
 import java.security.Principal;
 
 @RestController
-@ApiPrefix(Api.AUTH)
+@ApiPrefix(Api.PROFILE)
 @AllArgsConstructor
-public class AuthController {
+public class UserProfileController {
     private final AuthService authService;
-    private final Logging logger = Logging.of(AuthController.class);
+    private final Logging logger = Logging.of(UserProfileController.class);
 
     @Operation(summary = "Registration user")
     @ApiResponses(value = {

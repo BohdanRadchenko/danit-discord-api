@@ -2,8 +2,8 @@ package com.danit.discord.controllers;
 
 import com.danit.discord.annotations.ApiPrefix;
 import com.danit.discord.constants.Api;
+import com.danit.discord.dto.ResponseSuccess;
 import com.danit.discord.dto.user.UserResponse;
-import com.danit.discord.responses.ResponseSuccess;
 import com.danit.discord.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

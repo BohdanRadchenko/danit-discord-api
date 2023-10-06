@@ -1,6 +1,6 @@
 package com.danit.discord.serializers;
 
-import com.danit.discord.responses.ResponseData;
+import com.danit.discord.dto.ResponseData;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;

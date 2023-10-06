@@ -26,6 +26,9 @@ public class Api {
     public static final String API_AUTH_LOGOUT = API_AUTH + LOGOUT;
     public static final String API_AUTH_ME = API_AUTH + ME;
 
+    // PROFILE
+    public static final String PROFILE = "/profile";
+
     // USERS
     public static final String USERS = "/users";
 

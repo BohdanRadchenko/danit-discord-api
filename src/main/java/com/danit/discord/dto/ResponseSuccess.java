@@ -1,4 +1,4 @@
-package com.danit.discord.responses;
+package com.danit.discord.dto;
 
 public class ResponseSuccess<T> extends ResponseData<T> {
 
