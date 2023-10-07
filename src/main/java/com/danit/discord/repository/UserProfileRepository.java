@@ -8,13 +8,15 @@ import java.util.Optional;
 
 @Repository
 public interface UserProfileRepository extends AppRepository<UserProfile> {
-    boolean existsByEmail(String email);
+    Optional<UserProfile> getUserProfileByUser(User user);
 
-    boolean existsByUsername(String username);
-
-    boolean existsByEmailOrUsername(String email, String username);
-
-    Optional<User> findUserByUsername(String username);
-
-    Optional<User> findByEmail(String username);
+//    boolean existsByEmail(String email);
+//
+//    boolean existsByUsername(String username);
+//
+//    boolean existsByEmailOrUsername(String email, String username);
+//
+//    Optional<User> findUserByUsername(String username);
+//
+//    Optional<User> findByEmail(String username);
 }

@@ -14,13 +14,14 @@ public class UserAuthResponse {
     private String avatar;
 
     public static UserAuthResponse of(User user) {
+        UserResponse userResponse = UserResponse.of(user);
         return UserAuthResponse
                 .builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .userName(user.getUserName())
-                .avatar(user.getAvatar())
+                .id(userResponse.getId())
+                .email(userResponse.getEmail())
+                .userName(userResponse.getUserName())
+                .name(userResponse.getName())
+                .avatar(userResponse.getAvatar())
                 .build();
     }
 }

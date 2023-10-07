@@ -1,86 +1,46 @@
 package com.danit.discord.entities;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
+import com.danit.discord.dto.profile.UserProfileRequest;
+import com.danit.discord.utils.Palette;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-@Entity(name = "users")
+@Entity(name = "users_profile")
 @Data
 @ToString
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserProfile extends AbstractEntity implements UserDetails {
-    @Column(unique = true, nullable = false, updatable = false)
-    @Email(regexp = ".*@.*\\..*", message = "Email should be valid")
-    private String email;
-    @Column(unique = true, nullable = false)
-    private String username;
+public class UserProfile extends AbstractEntity {
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    @Column()
+    private Long server;
     @Column(nullable = false)
     private String name;
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
     @Column
     private String avatar;
-    @OneToMany(mappedBy = "owner")
-    private List<Server> owneredServers = new ArrayList<>();
-    @ManyToMany
-    @JoinTable(name = "text-user",
-            inverseJoinColumns = @JoinColumn(name = "channel_id",
-                    nullable = false,
-                    updatable = false),
-            joinColumns = @JoinColumn(name = "user_id",
-                    nullable = false,
-                    updatable = false),
-            foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
-            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
-    private List<TextChannel> textChannels = new ArrayList<>();
-    @OneToMany(mappedBy = "from")
-    private List<Message> messages;
+    @Column
+    private String description;
+    @Column
+    private String banner;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    public boolean isMainProfile() {
+        return server == null;
     }
 
-    public String getUserName() {
-        return username;
-    }
-
-    @Override
-    public String getPassword() {
-        return passwordHash;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
+    public static UserProfile create(User user, UserProfileRequest request) {
+        String bannerColor = request.getBanner() != null ? request.getBanner() : Palette.getRandomColor();
+        return UserProfile
+                .builder()
+                .user(user)
+                .name(request.getName())
+                .banner(bannerColor)
+                .build();
     }
 }

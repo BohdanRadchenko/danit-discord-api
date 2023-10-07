@@ -41,7 +41,7 @@ public class Api {
     // MESSAGES
     public static final String MESSAGES = "/messages";
     public static final String TYPES = "/types";
-    public static final String MESSAGES_TYPES = MESSAGES + "/types";
+    public static final String MESSAGES_TYPES = MESSAGES + TYPES;
 
     // TEXT
     public static final String CHANNELS_TEXT = CHANNELS + "/text";

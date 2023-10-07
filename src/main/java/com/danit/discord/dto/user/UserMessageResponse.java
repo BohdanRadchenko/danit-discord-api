@@ -9,14 +9,13 @@ import lombok.Data;
 public class UserMessageResponse {
     private Long id;
     private String userName;
-    private String avatar;
+//    private String avatar;
 
     public static UserMessageResponse of(User user) {
         return UserMessageResponse
                 .builder()
                 .id(user.getId())
                 .userName(user.getUserName())
-                .avatar(user.getAvatar())
                 .build();
     }
 }

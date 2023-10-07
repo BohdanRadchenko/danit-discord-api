@@ -1,13 +1,16 @@
 package com.danit.discord.services;
 
 import com.danit.discord.dto.auth.RegisterRequest;
+import com.danit.discord.dto.profile.UserProfileRequest;
 import com.danit.discord.dto.user.UserResponse;
 import com.danit.discord.entities.User;
+import com.danit.discord.entities.UserProfile;
 import com.danit.discord.exceptions.AlreadyExistException;
 import com.danit.discord.exceptions.NotFoundException;
 import com.danit.discord.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,14 +23,16 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
-    private final UserRepository userRepository;
+    @Lazy
+    private final UserProfileService userProfileService;
+    private final UserRepository repository;
 
     private boolean isExistByUsername(String username) {
-        return userRepository.existsByUsername(username);
+        return repository.existsByUsername(username);
     }
 
     private boolean isExistByEmail(String email) {
-        return userRepository.existsByEmail(email);
+        return repository.existsByEmail(email);
     }
 
     private void alreadyExistByEmail(String email) {
@@ -47,7 +52,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<UserResponse> getAllUsers() {
-        return userRepository
+        return repository
                 .findAll()
                 .stream()
                 .map(UserResponse::of)
@@ -55,24 +60,30 @@ public class UserService implements UserDetailsService {
     }
 
     public User save(User user) {
-        return userRepository.save(user);
+        return repository.save(user);
     }
 
     public User create(RegisterRequest registerRequest) {
         alreadyExistByEmail(registerRequest.getEmail());
         alreadyExistByUsername(registerRequest.getUsername());
-        User user = User
+        User newUser = User
                 .builder()
                 .email(registerRequest.getEmail())
                 .username(registerRequest.getUsername())
-                .name(registerRequest.getName())
                 .passwordHash(registerRequest.getPassword())
                 .build();
-        return save(user);
+        User user = save(newUser);
+        UserProfileRequest profileRequest = UserProfileRequest
+                .builder()
+                .name(registerRequest.getName())
+                .build();
+        UserProfile profile = userProfileService.create(user, profileRequest);
+        user.getProfiles().add(profile);
+        return user;
     }
 
     public User getByEmail(String email) throws NotFoundException {
-        Optional<User> userOptional = userRepository.findByEmail(email);
+        Optional<User> userOptional = repository.findByEmail(email);
         if (userOptional.isEmpty()) {
             throw new NotFoundException(
                     String.format("User with email %s not found!", email)
@@ -82,7 +93,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User getById(Long id) throws NotFoundException {
-        Optional<User> userOptional = userRepository.findById(id);
+        Optional<User> userOptional = repository.findById(id);
         if (userOptional.isEmpty()) {
             throw new NotFoundException(
                     String.format("User with id %s not found!", id)

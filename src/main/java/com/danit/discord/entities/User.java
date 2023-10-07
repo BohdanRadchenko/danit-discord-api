@@ -23,14 +23,12 @@ public class User extends AbstractEntity implements UserDetails {
     private String email;
     @Column(unique = true, nullable = false)
     private String username;
-    @Column(nullable = false)
-    private String name;
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
-    @Column
-    private String avatar;
     @OneToMany(mappedBy = "owner")
     private List<Server> owneredServers = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<UserProfile> profiles = new ArrayList<>();
     @ManyToMany
     @JoinTable(name = "text-user",
             inverseJoinColumns = @JoinColumn(name = "channel_id",
@@ -52,6 +50,18 @@ public class User extends AbstractEntity implements UserDetails {
 
     public String getUserName() {
         return username;
+    }
+
+    public List<UserProfile> getProfiles() {
+        return this.profiles == null
+                ? new ArrayList<UserProfile>()
+                : this.profiles;
+    }
+
+    public List<Server> getOwneredServers() {
+        return this.owneredServers == null
+                ? new ArrayList<Server>()
+                : this.owneredServers;
     }
 
     @Override
