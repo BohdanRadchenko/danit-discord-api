@@ -18,6 +18,7 @@ public class UserResponse {
     private String userName;
     private String name;
     private String avatar;
+    private String banner;
     private List<ServerResponse> servers;
 
     public static UserResponse of(User user) {
@@ -39,6 +40,7 @@ public class UserResponse {
         UserProfile profile = profileOpt.get();
         response.setAvatar(profile.getAvatar());
         response.setName(profile.getName());
+        response.setBanner(profile.getBanner());
         return response;
     }
 }

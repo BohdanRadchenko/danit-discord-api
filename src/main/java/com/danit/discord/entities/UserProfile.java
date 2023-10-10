@@ -24,6 +24,8 @@ public class UserProfile extends AbstractEntity {
     @Column(nullable = false)
     private String name;
     @Column
+    private String pronouns;
+    @Column
     private String avatar;
     @Column
     private String description;
@@ -35,11 +37,12 @@ public class UserProfile extends AbstractEntity {
     }
 
     public static UserProfile create(User user, UserProfileRequest request) {
-        String bannerColor = request.getBanner() != null ? request.getBanner() : Palette.getRandomColor();
+        String bannerColor = request.getBanner().isPresent() ? request.getBanner().get() : Palette.getRandomColor();
+        String name = request.getName().isPresent() ? request.getName().get() : "";
         return UserProfile
                 .builder()
                 .user(user)
-                .name(request.getName())
+                .name(name)
                 .banner(bannerColor)
                 .build();
     }

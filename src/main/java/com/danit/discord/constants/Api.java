@@ -3,6 +3,7 @@ package com.danit.discord.constants;
 public class Api {
     // VARIABLES
     public static final String PARAM_LINK = "link";
+    public static final String PARAM_SERVER_ID = "serverId";
 
     // COMMON
     public static final String PREFIX = "/api/v1";
@@ -10,6 +11,7 @@ public class Api {
     public static final String LINK = "/{link}";
     public static final String LINK_INVITE = "/{link}/invite";
     public static final String ROOM = "/room";
+    public static final String SERVER_ID = "/{serverId}";
 
     // AUTH
     public static final String AUTH = "/auth";
@@ -28,6 +30,7 @@ public class Api {
 
     // PROFILE
     public static final String PROFILE = "/profile";
+    public static final String PROFILE_SERVER_ID = PROFILE + SERVER_ID;
 
     // USERS
     public static final String USERS = "/users";

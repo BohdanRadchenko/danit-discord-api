@@ -1,7 +1,7 @@
 package com.danit.discord.services;
 
+import com.danit.discord.dto.profile.ProfileResponse;
 import com.danit.discord.dto.profile.UserProfileRequest;
-import com.danit.discord.dto.profile.UserProfileResponse;
 import com.danit.discord.entities.User;
 import com.danit.discord.entities.UserProfile;
 import com.danit.discord.exceptions.NotFoundException;
@@ -32,13 +32,13 @@ public class UserProfileService {
         return userOptional.get();
     }
 
-    public UserProfileResponse get(Principal principal) {
+    public ProfileResponse get(Principal principal) {
         User user = getUser(principal);
         List<UserProfile> profiles = user.getProfiles();
         if (profiles.isEmpty()) {
             throw new NotFoundException("User profile not found!");
         }
-        return UserProfileResponse.of(profiles);
+        return ProfileResponse.of(profiles);
     }
 
     public UserProfile create(User user, UserProfileRequest request) {

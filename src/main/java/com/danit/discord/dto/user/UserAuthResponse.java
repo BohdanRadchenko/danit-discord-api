@@ -12,6 +12,7 @@ public class UserAuthResponse {
     private String userName;
     private String name;
     private String avatar;
+    private String banner;
 
     public static UserAuthResponse of(User user) {
         UserResponse userResponse = UserResponse.of(user);
@@ -22,6 +23,7 @@ public class UserAuthResponse {
                 .userName(userResponse.getUserName())
                 .name(userResponse.getName())
                 .avatar(userResponse.getAvatar())
+                .banner(userResponse.getBanner())
                 .build();
     }
 }

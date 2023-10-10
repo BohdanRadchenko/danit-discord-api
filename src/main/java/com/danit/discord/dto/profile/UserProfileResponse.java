@@ -1,28 +1,38 @@
 package com.danit.discord.dto.profile;
 
 import com.danit.discord.entities.UserProfile;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserProfileResponse {
+    private String userName;
     private String name;
     private String avatar;
     private String description;
     private String banner;
 
-    public static UserProfileResponse of(List<UserProfile> profiles) {
-        UserProfile mainProfile = profiles.stream().filter(UserProfile::isMainProfile).findFirst().orElse(profiles.get(0));
-        List<UserProfile> serversProfile = profiles.stream().filter(p -> !p.isMainProfile()).toList();
+    public UserProfileResponse(UserProfileResponse profileResponse) {
+        this.userName = profileResponse.userName;
+        this.name = profileResponse.name;
+        this.avatar = profileResponse.avatar;
+        this.description = profileResponse.description;
+        this.banner = profileResponse.banner;
+    }
+
+    public static UserProfileResponse of(UserProfile profile) {
         return UserProfileResponse
                 .builder()
-                .name(mainProfile.getName())
-                .avatar(mainProfile.getAvatar())
-                .description(mainProfile.getDescription())
-                .banner(mainProfile.getBanner())
+                .userName(profile.getUser().getUserName())
+                .name(profile.getName())
+                .avatar(profile.getAvatar())
+                .description(profile.getDescription())
+                .banner(profile.getBanner())
                 .build();
     }
 }
