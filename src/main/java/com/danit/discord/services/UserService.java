@@ -108,23 +108,41 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
-    public User addFriend(User u1, User u2, boolean isAdd) {
-        if (isAdd) {
-            u1.setFriends(List.of(u2));
-            u1.setFriends(List.of(u2));
-        }
-        return u1;
+    public void addFriend(User u1, User u2) {
+            u1.getFriends().add(u2);
+            u2.getFriends().add(u1);
     }
 
-    public User invite(Boolean isAdd, String userEmail, UserInviteRequest request) throws NotFoundException, ForbiddenException, AlreadyExistException {
-        User principal = getByEmail(userEmail);
-        User user2 = getById(request.getId());
-        Optional<User> existUser = principal.getFriends().stream().filter(u -> u.getId().equals(request.getId())).findAny();
+    public void removeFriend(User u1, User u2 ) {
+            u1.getFriends().remove(u2);
+            u2.getFriends().remove(u1);
+    }
+
+    public List<User> getAllFriends(User user){
+        return  user.getFriends();
+    }
+    public void add(String userEmail, UserInviteRequest request) throws NotFoundException, ForbiddenException, AlreadyExistException {
+        User userFrom = getByEmail(userEmail);
+        User userTo = getById(request.getId());
+        Optional<User> existUser = userFrom.getFriends().stream().filter(u -> u.getId().equals(request.getId())).findAny();
         if (existUser.isPresent()) {
-            throw new AlreadyExistException(String.format("User with username: '%s' already exist added to your friend", user2.getUserName()));
+            throw new AlreadyExistException(String.format("User with username: '%s' already exist added to your friend", userTo.getUserName()));
+        } else {
+            addFriend(userFrom, userTo);
+            save(userFrom);
+            save(userTo);
         }
-        addFriend(principal, user2, isAdd);
-        save(user2);
-        return save(principal);
+    }
+    public void remove(String userEmail, UserInviteRequest request) throws NotFoundException, ForbiddenException, AlreadyExistException {
+        User userFrom = getByEmail(userEmail);
+        User userTo = getById(request.getId());
+       // Optional<User> existUser = userFrom.getFriends().stream().filter(u -> u.getId().equals(request.getId())).findAny();
+        /*if (existUser.isPresent()) {
+            throw new AlreadyExistException(String.format("User with username: '%s' already exist added to your friend", userTo.getUserName()));
+        } else {*/
+            removeFriend(userFrom, userTo);
+            save(userFrom);
+            save(userTo);
+        //}
     }
 }

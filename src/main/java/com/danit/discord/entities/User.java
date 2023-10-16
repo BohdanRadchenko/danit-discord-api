@@ -45,7 +45,7 @@ public class User extends AbstractEntity implements UserDetails {
     @OneToMany(mappedBy = "from")
     private List<Message> messages;
     @ManyToMany
-    @JoinTable(name = "user-user",
+    @JoinTable(name = "friends",
             inverseJoinColumns = @JoinColumn(name = "user_1",
                     nullable = false,
                     updatable = false),
