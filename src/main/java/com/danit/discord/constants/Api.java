@@ -28,7 +28,15 @@ public class Api {
 
     // USERS
     public static final String USERS = "/users";
-
+    public static final String ADD = "/add";
+    public static final String REMOVE = "/remove";
+    //INVITES
+    public static final String INVITES = "/invites";
+    public static final String ACCEPTED = "/accepted";
+    public static final String REJECTED = "/rejected";
+    public static final String GET_INVITE = "/getInvites";// get all invite to user
+    public static final String INVITE_ACCEPTED = INVITES +ACCEPTED;
+    public static final String INVITE_REJECTED = INVITES +REJECTED;
     // SERVERS
     public static final String SERVERS = "/servers";
 
