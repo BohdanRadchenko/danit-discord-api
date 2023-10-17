@@ -12,16 +12,16 @@ services:
       - 'POSTGRES_DB=discord_db'
     ports:
       - '5432:5432'
-  discord_rabbitmq:
-    image: 'rabbitmq:latest'
-    restart: always
-    container_name: 'discord_rabbitmq'
-    env_file: .env
-    environment:
-      - 'RABBITMQ_DEFAULT_PASS=secret'
-      - 'RABBITMQ_DEFAULT_USER=myuser'
-    ports:
-      - '5672'
+  #  discord_rabbitmq:
+  #    image: 'rabbitmq:latest'
+  #    restart: always
+  #    container_name: 'discord_rabbitmq'
+  #    env_file: .env
+  #    environment:
+  #      - 'RABBITMQ_DEFAULT_PASS=secret'
+  #      - 'RABBITMQ_DEFAULT_USER=myuser'
+  #    ports:
+  #      - '5672'
   discord_api:
     build: ./
     container_name: 'discord_api'

@@ -28,6 +28,10 @@ springdoc:
     path: /api-docs
 application:
   security:
+    cloudinary:
+      name: ${CLOUDINARY_CLOUD_NAME}
+      key: ${CLOUDINARY_API_KEY}
+      secret: ${CLOUDINARY_API_SECRET}
     jwt:
       access:
         key: ${JWT_ACCESS_SECRET}

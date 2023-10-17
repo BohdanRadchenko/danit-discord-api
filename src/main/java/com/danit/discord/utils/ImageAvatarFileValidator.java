@@ -12,8 +12,8 @@ import java.io.IOException;
 
 public class ImageAvatarFileValidator implements ConstraintValidator<ValidAvatar, MultipartFile> {
     private static final long MAX_AVATAR_SIZE = 3000000L;
-    private static final int MAX_AVATAR_WIDTH = 512;
-    private static final int MAX_AVATAR_HEIGHT = 512;
+    private static final int MAX_AVATAR_WIDTH = 1024;
+    private static final int MAX_AVATAR_HEIGHT = 1024;
 
     @Override
     public void initialize(ValidAvatar constraintAnnotation) {
@@ -26,8 +26,6 @@ public class ImageAvatarFileValidator implements ConstraintValidator<ValidAvatar
         if (multipartFile == null) return true;
 
         boolean result = true;
-
-        String contentType = multipartFile.getContentType();
 
         if (!isSupportedContentType(multipartFile)) {
             context.disableDefaultConstraintViolation();

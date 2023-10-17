@@ -25,8 +25,8 @@ import java.security.Principal;
 @ApiPrefix(Api.PROFILE)
 @AllArgsConstructor
 public class UserProfileController {
-    private final UserProfileService service;
     private final Logging logger = Logging.of(UserProfileController.class);
+    private final UserProfileService service;
 
     @Operation(summary = "Get current profile")
     @ApiResponses(value = {
@@ -39,7 +39,7 @@ public class UserProfileController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseSuccess<ProfileResponse> getAll(Principal principal, HttpServletRequest req) {
         logger.request.info(req, principal.getName());
-        ProfileResponse response = service.get(principal);
+        ProfileResponse response = service.getAll(principal);
         logger.response.info(req, response);
         return ResponseSuccess.of(response);
     }
@@ -55,19 +55,15 @@ public class UserProfileController {
     @PatchMapping(path = {"", "/", Api.SERVER_ID}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
 //    public ResponseSuccess<ProfileResponse> update(
-    public UserProfileRequest update(
+    public ResponseSuccess<ProfileResponse> update(
             @PathVariable(name = Api.PARAM_SERVER_ID, required = false) String serverId,
             @Valid @ModelAttribute UserProfileRequest form,
             Principal principal,
             HttpServletRequest req
     ) {
-        String res = "ID: " + serverId;
+        logger.request.info(req, String.format("%s | %s", serverId, form));
         System.out.println("form " + form);
-        return form;
-//        logger.request.info(req, data);
-//        System.out.println("data " + data);
-//        ProfileResponse response = service.get(principal);
-//        logger.response.info(req, response);
-//        return ResponseSuccess.of(response);
+        ProfileResponse response = service.updateProfile(form, principal, serverId);
+        return ResponseSuccess.of(response);
     }
 }

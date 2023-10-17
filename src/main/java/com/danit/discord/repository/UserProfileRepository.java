@@ -4,11 +4,11 @@ import com.danit.discord.entities.User;
 import com.danit.discord.entities.UserProfile;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface UserProfileRepository extends AppRepository<UserProfile> {
-    Optional<UserProfile> getUserProfileByUser(User user);
+    List<UserProfile> getUserProfilesByUser(User user);
 
 //    boolean existsByEmail(String email);
 //

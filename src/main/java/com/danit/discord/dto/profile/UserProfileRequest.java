@@ -14,7 +14,7 @@ import java.util.Optional;
 @Builder
 @ToString
 public class UserProfileRequest {
-    private String name;
+    private String name;ґ
     private String pronouns;
     private String description;
     private String banner;
