@@ -49,5 +49,16 @@ public class ServerController {
         return ResponseSuccess.of(serverService.getByUserEmail(principal.getName()));
     }
 
+    @Operation(summary = "Get servers test")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ServerResponse.class)))})
+    })
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/test")
+    public ResponseSuccess<List<ServerResponse>> getAllTest() {
+        return ResponseSuccess.of(serverService.getAllTest());
+    }
+
 }
 

@@ -46,6 +46,14 @@ public class ServerService {
                 .collect(Collectors.toList());
     }
 
+    public List<ServerResponse> getAllTest() {
+        List<Server> servers = serverRepository.findAll();
+        return servers
+                .stream()
+                .map(ServerResponse::of)
+                .collect(Collectors.toList());
+    }
+
     //TODO: remove next code after implementation invite
 //    public void serverInvite(User user, boolean answer) {
 //        if (answer) serverUsers.add(userRepository.getReferenceById(user.getId()));
