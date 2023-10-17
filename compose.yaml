@@ -3,6 +3,7 @@ version: '3.6'
 services:
   discord_postgres:
     image: postgres:alpine
+    restart: always
     container_name: 'discord_postgres'
     env_file: .env
     environment:
@@ -29,3 +30,6 @@ services:
       - "8080:8080"
     links:
       - "discord_postgres:postgres"
+networks:
+  net:
+    driver: "bridge"
